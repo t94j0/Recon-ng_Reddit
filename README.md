@@ -4,7 +4,7 @@
 1. Copy `reddit.py` file to personal recon-ng module folder
 ```
 mkdir -p ~/.recon-ng/modules/recon/hosts-hosts/
-curl -o https://raw.githubusercontent.com/t94j0/Recon-ng_Reddit/master/reddit.py ~/.recon-ng/modules/recon/hosts-hosts/
+curl -o ~/.recon-ng/modules/recon/hosts-hosts/reddit.py https://raw.githubusercontent.com/t94j0/Recon-ng_Reddit/master/reddit.py 
 ```
 
 2. Start recon-ng
