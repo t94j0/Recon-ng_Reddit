@@ -1,5 +1,5 @@
 from recon.core.module import BaseModule
-from urllib.parse import urlparse
+import urlparse
 import json
 
 class Module(BaseModule):
@@ -14,8 +14,7 @@ class Module(BaseModule):
 
     for host in hosts:
       self.verbose('Trying domain: {}'.format(host))
-      self.output("-------")
-      url = 'http://reddit.com/domain/%s.json' % (host)
+      url = 'http://reddit.com/domain/{}.json'.format(host)
 
       try:
         resp = self.request(url)
@@ -29,12 +28,10 @@ class Module(BaseModule):
             total_domains += 1
             permalink = child['data']['permalink']
             reddit_url = child['data']['url']
-            h = urlparse(reddit_url).hostname
-            self.add_domains(h)
+            h = urlparse.urlparse(reddit_url).hostname
+            self.add_hosts(h)
             self.alert('Permalink: http://reddit.com{}'.format(permalink))
         else:
           self.error('Error for domain {}'.format(url))
       except KeyboardInterrupt:
         raise KeyboardInterrupt
-
-    self.alert('Added {} domains'.format(total_domains))
