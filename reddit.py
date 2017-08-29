@@ -16,22 +16,19 @@ class Module(BaseModule):
       self.verbose('Trying domain: {}'.format(host))
       url = 'http://reddit.com/domain/{}.json'.format(host)
 
-      try:
-        resp = self.request(url)
-        code = resp.status_code
-        if code == 200 or code == 301:
-          if resp.json == None:
-            self.alert("No data was found for the url")
-            return
-          parsed = json.loads(resp.text)
-          for child in parsed["data"]["children"]:
-            total_domains += 1
-            permalink = child['data']['permalink']
-            reddit_url = child['data']['url']
-            h = urlparse.urlparse(reddit_url).hostname
-            self.add_hosts(h)
-            self.alert('Permalink: http://reddit.com{}'.format(permalink))
-        else:
-          self.error('Error for domain {}'.format(url))
-      except KeyboardInterrupt:
-        raise KeyboardInterrupt
+      resp = self.request(url)
+      code = resp.status_code
+      if code == 200 or code == 301:
+        if resp.json == None:
+          self.alert('No data was found for the url')
+          return
+
+        for child in resp.json['data']['children']:
+          total_domains += 1
+          permalink = child['data']['permalink']
+          reddit_url = child['data']['url']
+          h = urlparse.urlparse(reddit_url).hostname
+          self.add_hosts(h)
+          self.alert('Permalink: http://reddit.com{}'.format(permalink))
+      else:
+        self.error('Error for domain {}'.format(url))
